@@ -17,7 +17,6 @@ public class BinaryFAST {
 		double deltaT = 0.5;
 
 		// binary
-		
 		for (i = 1; i < N + 1; i++) {
 //			int j = 1;
 			if (i >= j) {
