@@ -4,6 +4,7 @@ public class BinaryFAST {
 	public static void main(String[] args) {
 
 //		String[] data = { "000", "001", "010", "011", "100", "101", "110", "111" };
+		
 		double[] data = { 5., 32., 38., -33., -19., -10., 1., -8., -20., 10., -1., 4., 11., -1., -7., -2 };
 		Complex[] complex = new Complex[data.length];
 		for (int i = 0; i < data.length; i++) {
