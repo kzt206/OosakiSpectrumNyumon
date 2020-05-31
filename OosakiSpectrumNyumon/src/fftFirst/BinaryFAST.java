@@ -76,7 +76,7 @@ public class BinaryFAST {
 		// print out
 		for (int ii = 0; ii < complex.length; ii++) {
 			complex[ii] = complex[ii].divide(N);
-			System.out.printf("%7.3f, %7.3f, %7.3f \n", complex[ii].real(), complex[ii].image(), complex[ii].abs()); // 有限複素フーリエ係数
+			System.out.printf("%2d, %7.3f, %7.3f, %7.3f \n", ii,complex[ii].real(), complex[ii].image(), complex[ii].abs()); // 有限複素フーリエ係数
 		}
 
 		System.out.println();
@@ -93,7 +93,7 @@ public class BinaryFAST {
 				power = amp*amp/2;
 			}
 			double fas = amp *N*deltaT/2;
-			System.out.printf("f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3f, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n", ii / (N * deltaT), a,b,amp,phase,fas,power); // 有限フーリエ係数
+			System.out.printf("%2d, f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3f, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n",ii, ii / (N * deltaT), a,b,amp,phase,fas,power); // 有限フーリエ係数
 		}
 
 	}
