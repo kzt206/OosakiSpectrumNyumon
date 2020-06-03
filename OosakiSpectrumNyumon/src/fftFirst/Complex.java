@@ -1,3 +1,8 @@
+/**
+ * @author Complex number class
+ * @version 0.0.1
+ */
+
 package fftFirst;
 
 /** 複素数クラス */
