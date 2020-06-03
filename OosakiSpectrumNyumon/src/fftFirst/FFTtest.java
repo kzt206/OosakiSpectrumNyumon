@@ -8,6 +8,10 @@ public class FFTtest {
 
 		
 		
-		fft.cfft(16,testData,2.,16,-1);
+//		fft.cfft(16,testData,2.,16,-1);
+
+		fft.ffft(16,testData,2.,16,-1);
+
+	
 	}
 }

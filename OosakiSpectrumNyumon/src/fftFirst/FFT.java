@@ -6,14 +6,22 @@
 package fftFirst;
 
 public class FFT {
+	private int number_data;
+	private double[] input_data;
+	private double samplingFrequency;
+	private Complex[] coef_complex_fft;
 
 	/**
 	 * constructor
 	 * 
 	 * @param
 	 */
-	public FFT() {
-
+	public FFT(int number_data, double[] input_data, double samplingFrequency) {
+		super();
+		this.number_data = number_data;
+		this.input_data = input_data;
+		this.samplingFrequency = samplingFrequency;
+		this.coef_complex_fft = coef_complex_fft;
 	}
 
 	/**
@@ -24,7 +32,7 @@ public class FFT {
 	 * @param samplingF Sampling frequency
 	 * @param ND
 	 * @param IND       -1 -> Fourier Transform, 1 -> Fourier Inverse Tranform
-	 *                  Reference from OOSAKI spectrum analysis basic
+	 *                  Oosaki Reference from OOSAKI spectrum analysis basic
 	 * 
 	 */
 	public Complex[] cfft(int N, double[] data, double samplingF, int ND, int IND) {
@@ -36,7 +44,7 @@ public class FFT {
 		int i = 1;
 		int j = 1;
 		int m = N / 2;
-		double deltaT = 1 / samplingF;
+//		double deltaT = 1 / samplingF;
 
 		// Bit Traverse
 		for (i = 1; i < N + 1; i++) {
@@ -63,7 +71,7 @@ public class FFT {
 
 		}
 
-		System.out.println();
+//		System.out.println();
 
 		int kmax = 1;
 		while (kmax < N) {
@@ -82,15 +90,54 @@ public class FFT {
 			kmax = istep;
 		}
 
-		// print out
-		System.out.println("Complex Fourie transform");
 		for (int ii = 0; ii < complex.length; ii++) {
 			complex[ii] = complex[ii].divide(N);
-			System.out.printf("%2d, %7.3f + %7.3fi, %7.3f \n", ii, complex[ii].real(), complex[ii].image(),
-					complex[ii].abs());
 		}
-		
+
 		return complex;
+	}
+
+	/**
+	 * Finite Fourier Fast Transform
+	 * 
+	 * @param N         number of data
+	 * @param data      Input data
+	 * @param samplingF Sampling frequency
+	 * @param ND
+	 * @param IND       -1 -> Fourier Transform, 1 -> Fourier Inverse Tranform
+	 * 
+	 */
+	public double[][] ffft(int N, double[] data, double samplingF, int ND, int IND) {
+		// IND : -1 -> Fourier Transform
+		// IND : 1 -> Fourier Inverse Tranform
+		// Reference from OOSAKI spectrum analysis basic
+
+		Complex[] complex = cfft(N, data, samplingF, ND, IND);
+		double deltaT = 1 / samplingF;
+
+		double[][] coef = new double[N][2];
+
+		System.out.println();
+		System.out.println("Fourie Transform");
+		// print out
+		for (int ii = 0; ii < complex.length / 2 + 1; ii++) {
+			coef[ii][0] = 2 * complex[ii].real(); // Ak cos coeficient
+			coef[ii][1] = -2 * complex[ii].image(); // Bk sin coeficient
+			double amp = 2 * complex[ii].abs();
+			double phase = Math.atan(-1 * coef[ii][1] / coef[ii][0]) / Math.PI * 180.;
+			double power;
+			if (ii == 0 || ii == complex.length / 2) {
+				power = amp * amp / 4;
+			} else {
+				power = amp * amp / 2;
+			}
+			double fas = amp * N * deltaT / 2;
+			System.out.printf("%2d, f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3f, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n", ii,
+					ii / (N * deltaT), coef[ii][0], coef[ii][1], amp, phase, fas, power);
+		}
+
+		return coef;
+
 	}
 
 	/**
@@ -167,7 +214,7 @@ public class FFT {
 		for (int ii = 0; ii < complex.length; ii++) {
 			complex[ii] = complex[ii].divide(N);
 			System.out.printf("%2d, %7.3f, %7.3f, %7.3f \n", ii, complex[ii].real(), complex[ii].image(),
-					complex[ii].abs()); // �L�����f�t�[���G�W��
+					complex[ii].abs());
 		}
 
 		System.out.println();
