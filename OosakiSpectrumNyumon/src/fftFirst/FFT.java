@@ -30,7 +30,7 @@ public class FFT {
 	 * @param N         number of data
 	 * @param data      Input data
 	 * @param samplingF Sampling frequency
-	 * @param ND
+	 * @param ND        not used
 	 * @param IND       -1 -> Fourier Transform, 1 -> Fourier Inverse Tranform
 	 *                  Oosaki Reference from OOSAKI spectrum analysis basic
 	 * 
@@ -103,7 +103,7 @@ public class FFT {
 	 * @param N         number of data
 	 * @param data      Input data
 	 * @param samplingF Sampling frequency
-	 * @param ND
+	 * @param ND        not used
 	 * @param IND       -1 -> Fourier Transform, 1 -> Fourier Inverse Tranform
 	 * 
 	 */
@@ -132,8 +132,12 @@ public class FFT {
 				power = amp * amp / 2;
 			}
 			double fas = amp * N * deltaT / 2;
-			System.out.printf("%2d, f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3f, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n", ii,
+//			System.out.printf("%2d, f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3f, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n", ii,
+//					ii / (N * deltaT), coef[ii][0], coef[ii][1], amp, phase, fas, power);
+
+			System.out.printf("%2d, f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3e, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n", ii,
 					ii / (N * deltaT), coef[ii][0], coef[ii][1], amp, phase, fas, power);
+
 		}
 
 		return coef;
@@ -334,6 +338,103 @@ public class FFT {
 			System.out.printf("%2d, f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3f, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n", ii,
 					ii / (N * deltaT), a, b, amp, phase, fas, power); // �L���t�[���G�W��
 		}
+	}
+
+	/**
+	 * Low Pass Filter
+	 * 
+	 * @param fe
+	 * @param j
+	 * @param b
+	 * @param w
+	 */
+	public double[] lpf(double fe, long j, double[] b, double[] w) {
+		int offset = (int) j / 2;
+		for (int m = -offset; m < offset + 1; m++) {
+			b[offset + m] = 2. * fe * sinc(2. * Math.PI * fe * m);
+		}
+		for (int m = 1; m < j + 1 + 1; m++) {
+			b[m] = b[m] * w[m];
+		}
+
+		return b;
+	}
+
+	/**
+	 * High Pass Filter
+	 * 
+	 * @param fe
+	 * @param j
+	 * @param b
+	 * @param w
+	 */
+	public double[] hpf(double fe, long j, double[] b, double[] w) {
+		int offset = (int) j / 2;
+		for (int m = -offset; m < offset + 1; m++) {
+			b[offset + m] = sinc(Math.PI * m) - 2. * fe * sinc(2. * Math.PI * fe * m);
+		}
+		for (int m = 1; m < j + 1 + 1; m++) {
+			b[m] = b[m] * w[m];
+		}
+
+		return b;
+	}
+
+	/**
+	 * Band Pass Filter
+	 * 
+	 * @param fe1
+	 * @param fe2
+	 * @param j
+	 * @param b
+	 * @param w
+	 */
+	public double[] bpf(double fe1, double fe2, long j, double[] b, double[] w) {
+		int offset = (int) j / 2;
+		for (int m = -offset; m < offset + 1; m++) {
+			b[offset + m] = 2. * fe2 * sinc(2. * Math.PI * fe2 * m) - 2. * fe1 * sinc(2. * Math.PI * fe1 * m);
+		}
+		for (int m = 1; m < j + 1 + 1; m++) {
+			b[m] = b[m] * w[m];
+		}
+
+		return b;
+	}
+
+	/**
+	 * Sinc function
+	 * 
+	 * @param x x-value
+	 * 
+	 */
+	public double sinc(double x) {
+		double sinc;
+		if (Math.abs(x) < 0.00001) {
+			sinc = 1.;
+		} else {
+			sinc = Math.sin(x) / x;
+		}
+		return sinc;
+	}
+
+	/**
+	 * Hanning window
+	 * 
+	 * @param w window value
+	 * @param n
+	 */
+	public double[] hannigWindow(double[] w, long n) {
+		double[] hanning = new double[w.length];
+		if (n % 2 == 0) {
+			for (int i = 1; i < n + 1; i++) {
+				hanning[i] = 0.5 - 0.5 * Math.cos(2. * Math.PI * (i - 1) / n);
+			}
+		} else {
+			for (int i = 1; i < n + 1; i++) {
+				hanning[i] = 0.5 - 0.5 * Math.cos(2. * Math.PI * (i - 0.5) / n);
+			}
+		}
+		return hanning;
 	}
 
 }
