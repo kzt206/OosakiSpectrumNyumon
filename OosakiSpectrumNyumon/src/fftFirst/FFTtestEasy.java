@@ -88,13 +88,15 @@ public class FFTtestEasy {
 		double[][] coef3 = fft.ffft(nn, xr, 2, nn, ind);
 		System.out.println();
 		w = fft3.hannigWindow(w, j+1);
-		System.out.println();
+		System.out.println("\n<<<<  w  >>>>");
 		for(int i =0;i<j+1;i++) {
 			System.out.println(w[i]);
 		}
-		fft3.bpf(fe1, fe2, j, b, w);
-		
-		
+		b = fft3.bpf(fe1, fe2, j, b, w);
+		System.out.println("\n<<<<  b  >>>>");
+		for(int i =0;i<j+1;i++) {
+			System.out.println(b[i]);
+		}
 		
 		// end 20200802
 		
