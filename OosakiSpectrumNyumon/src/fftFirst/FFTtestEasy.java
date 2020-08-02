@@ -47,10 +47,10 @@ public class FFTtestEasy {
 		//データに対するFFTの計算
 		int ind = -1;
 		FFT fft2 = new FFT(nn, xr0, 2); // 2 = 1/dt
-		double[][] coef = fft.ffft(nn, xr0, 2, nn, ind);
+		double[][] coef2 = fft.ffft(nn, xr0, 2, nn, ind);
 		System.out.println();
 		for(int i=0;i<nfold;i++) {
-			System.out.println(coef[i][0] + " " + coef[i][1]);
+			System.out.println(coef2[i][0] + " " + coef2[i][1]);
 		}
 		
 		//フィルター
@@ -74,7 +74,25 @@ public class FFTtestEasy {
 		double[] b = new double[j+1];
 		double[] w = new double[j+1];
 		//データの再読み込み
-		
+		for(int i=0;i<n;i++) {
+			xr[i] = testData[i];
+			xi[i] = 0.;
+		}
+		for(int i=n;i<nn;i++) {
+			xr[i] = 0.;
+			xi[i] = 0.;
+		}
+		//データに対するFFTの計算
+		ind = -1;
+		FFT fft3 = new FFT(nn, xr, 2); // 2 = 1/dt
+		double[][] coef3 = fft.ffft(nn, xr, 2, nn, ind);
+		System.out.println();
+		w = fft3.hannigWindow(w, j+1);
+		System.out.println();
+		for(int i =0;i<j+1;i++) {
+			System.out.println(w[i]);
+		}
+		fft3.bpf(fe1, fe2, j, b, w);
 		
 		// end 20200802
 		

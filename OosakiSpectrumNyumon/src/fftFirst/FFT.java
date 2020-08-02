@@ -394,7 +394,7 @@ public class FFT {
 		for (int m = -offset; m < offset + 1; m++) {
 			b[offset + m] = 2. * fe2 * sinc(2. * Math.PI * fe2 * m) - 2. * fe1 * sinc(2. * Math.PI * fe1 * m);
 		}
-		for (int m = 1; m < j + 1 + 1; m++) {
+		for (int m = 0; m < j + 1 ; m++) {
 			b[m] = b[m] * w[m];
 		}
 
@@ -426,11 +426,11 @@ public class FFT {
 	public double[] hannigWindow(double[] w, long n) {
 		double[] hanning = new double[w.length];
 		if (n % 2 == 0) {
-			for (int i = 1; i < n + 1; i++) {
+			for (int i = 0; i < n ; i++) {
 				hanning[i] = 0.5 - 0.5 * Math.cos(2. * Math.PI * (i - 1) / n);
 			}
 		} else {
-			for (int i = 1; i < n + 1; i++) {
+			for (int i = 0; i < n ; i++) {
 				hanning[i] = 0.5 - 0.5 * Math.cos(2. * Math.PI * (i - 0.5) / n);
 			}
 		}
