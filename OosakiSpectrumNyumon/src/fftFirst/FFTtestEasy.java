@@ -98,6 +98,32 @@ public class FFTtestEasy {
 			System.out.println(b[i]);
 		}
 		
+		for(int i=0;i<j;i++) {
+			br[i] = b[i];
+			bi[i] = 0.;
+		}
+		for(int i=j+1;i<nn;i++) {
+			br[i] = 0.;
+			bi[i] = 0.;
+		}
+		
+		//フィルターに対するFFTの計算
+		ind = -1;
+		FFT fft4 = new FFT(nn, br, 2); // 2 = 1/dt
+		System.out.println("\n\n<<fft4>>");
+		double[][] coef4 = fft.ffft(nn, br, 2, nn, ind);
+		for(int i =0;i<nn;i++) {
+			yr[i] = coef3[i][0] * coef4[i][0] - coef3[i][1] * coef4[i][1];
+			yi[i] = coef3[i][1] * coef4[i][0] + coef3[i][0] * coef4[i][1];
+		}
+		System.out.println("\n<< 7,8 >>");
+		for(int i=0;i<nfold;i++) {
+			System.out.printf("%8.6f, %10.8f\n", (double)i/nn/dt,Math.sqrt(yr[i]*yr[i] + yi[i]*yi[i]));
+		}
+		//フーリエ逆変換
+		
+		
+		
 		// end 20200802
 		
 		

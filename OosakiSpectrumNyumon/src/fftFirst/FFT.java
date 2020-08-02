@@ -135,9 +135,13 @@ public class FFT {
 //			System.out.printf("%2d, f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3f, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n", ii,
 //					ii / (N * deltaT), coef[ii][0], coef[ii][1], amp, phase, fas, power);
 
-			System.out.printf("%2d, f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3e, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n", ii,
-					ii / (N * deltaT), coef[ii][0], coef[ii][1], amp, phase, fas, power);
+//			System.out.printf("%2d, f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3e, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n", ii,
+//					ii / (N * deltaT), coef[ii][0], coef[ii][1], amp, phase, fas, power);
+			System.out.printf("%10.8f, %10.8f\n",
+					ii / (N * deltaT), amp);
 
+			
+			
 		}
 
 		return coef;
