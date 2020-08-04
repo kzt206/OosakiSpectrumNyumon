@@ -431,11 +431,11 @@ public class FFT {
 		double[] hanning = new double[w.length];
 		if (n % 2 == 0) {
 			for (int i = 0; i < n ; i++) {
-				hanning[i] = 0.5 - 0.5 * Math.cos(2. * Math.PI * (i - 1) / n);
+				hanning[i] = 0.5 - 0.5 * Math.cos(2. * Math.PI * (i + 1) / n);
 			}
 		} else {
 			for (int i = 0; i < n ; i++) {
-				hanning[i] = 0.5 - 0.5 * Math.cos(2. * Math.PI * (i - 0.5) / n);
+				hanning[i] = 0.5 - 0.5 * Math.cos(2. * Math.PI * (i + 0.5) / n);
 			}
 		}
 		return hanning;
