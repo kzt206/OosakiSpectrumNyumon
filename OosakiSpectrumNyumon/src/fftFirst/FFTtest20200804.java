@@ -15,5 +15,6 @@ public class FFTtest20200804 {
 			System.out.printf("i:%4d, xr:%11.6f, xi:%11.6f, amp:%11.6f\n",i,x[i][0],x[i][1],temp);
 		}
 		
+		
 	}
 }
