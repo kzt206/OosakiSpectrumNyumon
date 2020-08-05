@@ -549,15 +549,16 @@ public class FFT {
 	 * @param w
 	 */
 	public double[] bpf(double fe1, double fe2, long j, double[] b, double[] w) {
+		double[] b2 = new double[b.length];
 		int offset = (int) j / 2;
 		for (int m = -offset; m < offset + 1; m++) {
-			b[offset + m] = 2. * fe2 * sinc(2. * Math.PI * fe2 * m) - 2. * fe1 * sinc(2. * Math.PI * fe1 * m);
+			b[offset + m ] = 2. * fe2 * sinc(2. * Math.PI * fe2 * m) - 2. * fe1 * sinc(2. * Math.PI * fe1 * m);
 		}
 		for (int m = 0; m < j + 1 ; m++) {
-			b[m] = b[m] * w[m];
+			b2[m] = b[m+1] * w[m];
 		}
 
-		return b;
+		return b2;
 	}
 
 	/**

@@ -3,17 +3,17 @@ package fftFirst;
 
 public class FFTtest20200804 {
 	public static void main(String... args) {
-		double[] testData = { 5., 32., 38., -33., -19., -10., 1., -8., -20., 10., -1., 4., 11., -1., -7., -2 };
-		double temp;
-		
-		FFT fft = new FFT(16, testData, 2);
-		
-		double[][] x = fft.fir_fft(16, testData, 2, 0, -1);
-	
-		for(int i = 0;i<testData.length;i++) {
-			temp = Math.sqrt(Math.pow(x[i][0], 2.) + Math.pow(x[i][1], 2.));
-			System.out.printf("i:%4d, xr:%11.6f, xi:%11.6f, amp:%11.6f\n",i,x[i][0],x[i][1],temp);
-		}
+//		double[] testData = { 5., 32., 38., -33., -19., -10., 1., -8., -20., 10., -1., 4., 11., -1., -7., -2 };
+//		double temp;
+//		
+//		FFT fft = new FFT(16, testData, 2);
+//		
+//		double[][] x = fft.fir_fft(16, testData, 2, 0, -1);
+//	
+//		for(int i = 0;i<testData.length;i++) {
+//			temp = Math.sqrt(Math.pow(x[i][0], 2.) + Math.pow(x[i][1], 2.));
+//			System.out.printf("i:%4d, xr:%11.6f, xi:%11.6f, amp:%11.6f\n",i,x[i][0],x[i][1],temp);
+//		}
 		
 		fftTest();
 	}
@@ -47,10 +47,18 @@ public class FFTtest20200804 {
 		//データに対するFFTの計算
 		int ind = -1;
 		FFT fft2 = new FFT(nn, xr0, 2); // 2 = 1/dt
-		double[][] coef2 = fft2.ffft(nn, xr0, 2, nn, ind);
+		double[][] coef2 = fft2.fir_fft(nn, xr0, xi0, 2, nn, ind);
 		System.out.println();
+		System.out.println("D,E(5,6)");
 		for(int i=0;i<nfold;i++) {
-			System.out.println(coef2[i][0] + " " + coef2[i][1]);
+			double temp2 = (double)i/nn/dt;
+//OK			System.out.println( temp2 +" , " + Math.sqrt(Math.pow(coef2[i][0], 2.) + Math.pow(coef2[i][1], 2.))) ;
+		}
+		
+		System.out.println();
+		System.out.println("xr0,xi0");
+		for(int i=0;i<nfold;i++) {
+//OK			System.out.println(coef2[i][0] + " " + coef2[i][1]);
 		}
 		
 		//フィルター
@@ -71,7 +79,7 @@ public class FFTtest20200804 {
 		double[] yi = new double[nn];
 		double[] br = new double[nn];
 		double[] bi = new double[nn];
-		double[] b = new double[j+1];
+		double[] b = new double[j+2];
 		double[] w = new double[j+1];
 		//データの再読み込み
 		for(int i=0;i<n;i++) {
@@ -85,17 +93,24 @@ public class FFTtest20200804 {
 		//データに対するFFTの計算
 		ind = -1;
 		FFT fft3 = new FFT(nn, xr, 2); // 2 = 1/dt
-		double[][] coef3 = fft3.ffft(nn, xr, 2, nn, ind);
+		double[][] coef3 = fft3.fir_fft(nn, xr,xi, 2, nn, ind);
+		System.out.println();
+		System.out.println("xr,xi");
+		for(int i=0;i<nn;i++) {
+//OK			System.out.println(coef3[i][0] + " " + coef3[i][1]);
+		}
+		
+		
 		System.out.println();
 		w = fft3.hannigWindow(w, j+1);
 		System.out.println("\n<<<<  w  >>>>");
 		for(int i =0;i<j+1;i++) {
-			System.out.println(w[i]);
+//OK			System.out.println(w[i]);
 		}
 		b = fft3.bpf(fe1, fe2, j, b, w);
 		System.out.println("\n<<<<  b  >>>>");
 		for(int i =0;i<j+1;i++) {
-			System.out.println(b[i]);
+			System.out.println(b[i]); //OK
 		}
 		
 		for(int i=0;i<j;i++) {
