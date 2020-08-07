@@ -1,5 +1,6 @@
 package fftFirst;
 
+import java.util.function.DoublePredicate;
 
 public class FFTtest20200804 {
 	public static void main(String... args) {
@@ -110,7 +111,7 @@ public class FFTtest20200804 {
 		b = fft3.bpf(fe1, fe2, j, b, w);
 		System.out.println("\n<<<<  b  >>>>");
 		for(int i =0;i<j+1;i++) {
-			System.out.println(b[i]); //OK
+//			System.out.println(b[i]); //OK
 		}
 		
 		for(int i=0;i<j;i++) {
@@ -126,17 +127,39 @@ public class FFTtest20200804 {
 		ind = -1;
 		FFT fft4 = new FFT(nn, br, 2); // 2 = 1/dt
 		System.out.println("\n\n<<fft4>>");
-		double[][] coef4 = fft4.ffft(nn, br, 2, nn, ind);
+//		double[][] coef4 = fft4.ffft(nn, br, 2, nn, ind);
+		double[][] coef4 = fft4.fir_fft(nn, br, bi, 2, nn, ind);
+		
+		//フィルター後のbr,biの表示
+		System.out.println("\n<<<<  br,bi  >>>>");
+		for(int i =0;i<j+1;i++) {
+//			System.out.println(coef4[i][0] + " ," + coef4[i][1]); //OK
+		}
+		
 		for(int i =0;i<nn;i++) {
 			yr[i] = coef3[i][0] * coef4[i][0] - coef3[i][1] * coef4[i][1];
 			yi[i] = coef3[i][1] * coef4[i][0] + coef3[i][0] * coef4[i][1];
 		}
+		System.out.println("\n<<<<  yr,yi  >>>>");
+		for(int i =0;i<nn;i++) {
+//			System.out.println(yr[i] + " ," + yi[i]);  // OK
+		}
+		
+		
+		
 		System.out.println("\n<< 7,8 >>");
 		for(int i=0;i<nfold;i++) {
-			System.out.printf("%8.6f, %10.8f\n", (double)i/nn/dt,Math.sqrt(yr[i]*yr[i] + yi[i]*yi[i]));
+//			System.out.printf("%8.6f, %10.8f\n", (double)i/nn/dt,Math.sqrt(yr[i]*yr[i] + yi[i]*yi[i])); //OK
 		}
 		//フーリエ逆変換
+		ind = 1;
+		double[][] coef5 = fft4.fir_fft(nn, yr, yi, 2, nn,ind);
+		System.out.println("\n<<<<  yr2,yi2  >>>>");
+		for(int i =0;i<nn;i++) {
+			System.out.println(coef5[i][0] + " ," + coef5[i][1]);  
+		}
 		
+		//結果を出力（調整波形）
 		
 		
 		// end 20200805
