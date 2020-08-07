@@ -156,11 +156,15 @@ public class FFTtest20200804 {
 		double[][] coef5 = fft4.fir_fft(nn, yr, yi, 2, nn,ind);
 		System.out.println("\n<<<<  yr2,yi2  >>>>");
 		for(int i =0;i<nn;i++) {
-			System.out.println(coef5[i][0] + " ," + coef5[i][1]);  
+//			System.out.println(coef5[i][0] + " ," + coef5[i][1]);  //OK
 		}
 		
 		//結果を出力（調整波形）
-		
+		System.out.println();
+		System.out.println("\n<<<<  filtered waveform  >>>>");
+		for(int i =0;i<n;i++) {
+			System.out.printf("%10.6f\n",coef5[j/2-1+i][0]/nn);  //OK
+		}
 		
 		// end 20200805
 	}
