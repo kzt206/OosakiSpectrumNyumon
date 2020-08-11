@@ -1,6 +1,5 @@
 package fftFirst;
 
-import java.util.function.DoublePredicate;
 
 public class FFTtest20200807 {
 	public static void main(String... args) {
