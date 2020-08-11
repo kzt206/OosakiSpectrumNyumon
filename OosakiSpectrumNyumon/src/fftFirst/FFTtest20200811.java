@@ -149,7 +149,7 @@ public class FFTtest20200811 {
 		// Shori end
 		
 		// output data
-		File outfile = new File("d:\\5993_filtered_wave.txt");
+		File outfile = new File("5993_filtered_wave3.txt");
 		try(BufferedWriter bw  = new BufferedWriter(new FileWriter(outfile))){
 			String text;
 			for(int i = 0;i<n;i++) {
