@@ -14,7 +14,12 @@ public class FFTtest20200811 {
 
 		// Input data
 		int n = 1024;
-
+		double dt = 0.01;
+		double lower = 1;
+		double upper = 7;
+		double alpha = 1;
+		
+		
 		double[] waveData = new double[n];
 		File file = new File("5993wave.txt");
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -32,7 +37,9 @@ public class FFTtest20200811 {
 
 		}
 
-		double[] filterData = filteringBPF(waveData, 1024, 0.01, 1, 7, 1);
+		double[] filterData = filteringBPF(waveData, n, dt,lower,upper,alpha);
+		
+		
 		
 		// output data
 		File outfile = new File("5993_filtered_wave4.txt");
