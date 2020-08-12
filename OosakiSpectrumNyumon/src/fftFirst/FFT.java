@@ -508,15 +508,16 @@ public class FFT {
 	 * @param w
 	 */
 	public double[] lpf(double fe, long j, double[] b, double[] w) {
+		double[] b2 = new double[b.length];
 		int offset = (int) j / 2;
 		for (int m = -offset; m < offset + 1; m++) {
 			b[offset + m] = 2. * fe * sinc(2. * Math.PI * fe * m);
 		}
-		for (int m = 1; m < j + 1 + 1; m++) {
-			b[m] = b[m] * w[m];
+		for (int m = 0; m < j + 1 + 1; m++) {
+			b2[m] = b[m+1] * w[m];
 		}
 
-		return b;
+		return b2;
 	}
 
 	/**
@@ -528,15 +529,16 @@ public class FFT {
 	 * @param w
 	 */
 	public double[] hpf(double fe, long j, double[] b, double[] w) {
+		double[] b2 = new double[b.length];
 		int offset = (int) j / 2;
 		for (int m = -offset; m < offset + 1; m++) {
 			b[offset + m] = sinc(Math.PI * m) - 2. * fe * sinc(2. * Math.PI * fe * m);
 		}
 		for (int m = 1; m < j + 1 + 1; m++) {
-			b[m] = b[m] * w[m];
+			b2[m] = b[m+1] * w[m];
 		}
 
-		return b;
+		return b2;
 	}
 
 	/**
