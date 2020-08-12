@@ -12,7 +12,7 @@ public class FFTtest20200811 {
 
 //		akatani5993();
 
-		// Input data
+		// Input data akatani test data
 		int n = 1024;
 		double dt = 0.01;
 		double lower = 1;
