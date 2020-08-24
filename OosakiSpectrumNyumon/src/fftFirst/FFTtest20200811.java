@@ -42,7 +42,8 @@ public class FFTtest20200811 {
 		
 		
 		// output data
-		File outfile = new File("5993_filtered_wave4.txt");
+//		File outfile = new File("5993_filtered_wave4.txt");
+		File outfile = new File("5993_filtered_wave5.txt");
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(outfile))) {
 			String text;
 			for (int i = 0; i < n; i++) {
