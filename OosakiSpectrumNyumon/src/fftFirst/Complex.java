@@ -92,6 +92,11 @@ public class Complex {
 		return Math.sqrt(real*real + image*image);
 	}
 	
+	/** 複素共役 */
+	public Complex conjg() {
+		return new Complex(real,-1. * image);
+	}
+	
 	
 	/** オイラー公式 */
 	public Complex cexp() {
