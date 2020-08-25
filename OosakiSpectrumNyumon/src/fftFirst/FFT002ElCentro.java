@@ -1,8 +1,10 @@
 package fftFirst;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 
 public class FFT002ElCentro {
 	public static void main(String... args) {
@@ -45,6 +47,22 @@ public class FFT002ElCentro {
 		reidaihaFft.fft(nOfData, wave, samplingFrequency, nOfData, -1);
 		double[][] fas = reidaihaFft.fas(nOfData, wave, samplingFrequency, nOfData);
 
+		System.out.println("output to file");
+
+		// output data
+		File outfile = new File("El_Centro_FAS.txt");
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(outfile))) {
+			String text;
+			for (int i = 0; i < nOfData/2 + 1; i++) {
+				text = String.valueOf(fas[i][0]) + " , " + String.valueOf(fas[i][1]);
+				bw.write(text);
+				bw.newLine();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
 		
 		
 	}
