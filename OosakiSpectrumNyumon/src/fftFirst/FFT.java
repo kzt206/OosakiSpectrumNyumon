@@ -378,12 +378,9 @@ public class FFT {
 	 * @param data      Input data
 	 * @param samplingF Sampling frequency
 	 * @param ND        not used
-	 * @param IND       -1 -> Fourier Transform, 1 -> Fourier Inverse Tranform
 	 * 
 	 */
 	public double[][] fas(int N, double[] data, double samplingF, int ND) {
-		// IND : -1 -> Fourier Transform
-		// IND : 1 -> Fourier Inverse Tranform
 		// Reference from OOSAKI spectrum analysis basic
 
 		int IND = -1;
@@ -400,11 +397,11 @@ public class FFT {
 		System.out.println("Fourie Transform");
 		// print out
 		for (int ii = 0; ii < complex.length / 2 + 1; ii++) {
-			fas[ii][0] = ii / (N * deltaT);
+			fas[ii][0] = ii / (N * deltaT);      // Frequency 
 			coef[ii][0] = 2 * complex[ii].real(); // Ak cos coeficient
 			coef[ii][1] = -2 * complex[ii].image(); // Bk sin coeficient
-			double amp = 2 * complex[ii].abs();
-			fas[ii][1] = amp * N * deltaT / 2;
+			double amp = 2 * complex[ii].abs();  // Amplitude
+			fas[ii][1] = amp * N * deltaT / 2;   // Fourier amplitude spectrum
 //			System.out.printf("%2d, f:%7.3f, A:%7.3f, B:%7.3f, AMP:%7.3f, PHASE:%7.3f ,FAS:%7.3f ,Power:%7.3f\n", ii,
 //					ii / (N * deltaT), coef[ii][0], coef[ii][1], amp, phase, fas, power);
 

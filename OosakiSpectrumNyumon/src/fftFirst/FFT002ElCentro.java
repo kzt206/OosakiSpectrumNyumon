@@ -53,7 +53,7 @@ public class FFT002ElCentro {
 		File outfile = new File("El_Centro_FAS.txt");
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(outfile))) {
 			String text;
-			for (int i = 0; i < nOfData/2 + 1; i++) {
+			for (int i = 0; i < fas.length; i++) {
 				text = String.valueOf(fas[i][0]) + " , " + String.valueOf(fas[i][1]);
 				bw.write(text);
 				bw.newLine();
