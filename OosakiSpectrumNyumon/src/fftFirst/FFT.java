@@ -37,9 +37,9 @@ public class FFT {
 	 * 
 	 */
 	public Complex[] fast(int N,Complex[] x,int nd,int IND) {
-		Complex[] complex = new Complex[x.length];
-		for (int i = 0; i < x.length; i++) {
-			complex[i].setComplex(x[i].real, x[i].image);
+		Complex[] complex = new Complex[nd];
+		for (int i = 0; i < N; i++) {
+			complex[i] = new Complex(x[i].real, x[i].image);
 		}
 
 		int i = 1;
@@ -91,7 +91,7 @@ public class FFT {
 			kmax = istep;
 		}
 
-		for (int ii = 0; ii < complex.length; ii++) {
+		for (int ii = 0; ii < N; ii++) {
 			complex[ii] = complex[ii].divide(N);
 		}
 

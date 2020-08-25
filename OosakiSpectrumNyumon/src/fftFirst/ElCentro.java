@@ -26,16 +26,16 @@ public class ElCentro {
 			int nLine = 0;
 			int i = 0;
 			while ((line = br.readLine()) != null) {
-				if (nLine >= 3) {
+				if (nLine >= 3 && i < 400) {
 					String[] data = line.split(",", 0);
 					time[i] = Double.parseDouble(data[0]);
 					wave[i] = Double.parseDouble(data[1]);
 					// waveData[i] = Double.parseDouble(text);
-					for (String elem : data) {
-						System.out.print(elem + ",");
-
-					}
-					System.out.println();
+//					for (String elem : data) {
+//						System.out.print(elem + ",");
+//
+//					}
+//					System.out.println();
 					i++;
 				}
 				nLine++;
@@ -46,7 +46,11 @@ public class ElCentro {
 
 		}
 
-		System.out.println();
+		System.out.println("fpac");
+		double[] fpac = fpac(400, wave, 400, 0.02, 100, 257);
+		
+		
+		System.out.println("output");
 //		double[] filterData = filteringBPF(waveData, n, dt, lower, upper, alpha);
 
 //		// output data
@@ -78,15 +82,15 @@ public class ElCentro {
 		
 		Complex[] c = new Complex[8192];
 		for(int i = 0;i<n;i++) {
-			c[i].setComplex(x[i], 0.);
+			c[i] = new Complex(x[i], 0.);
 		}
 		int nt = 2;
-		if(nt<n) {
+		while(nt<n) {
 			nt *= 2;
 		}
 		if(nt != n) {
 			for(int i = n;i<nt;i++) {
-				c[i].setComplex(0.,0.);
+				c[i] = new Complex(0.,0.);
 			}
 		}
 		int nfold = nt/2 + 1;
@@ -110,17 +114,17 @@ public class ElCentro {
 			g[i] = 2. * f[i]*f[i] /t;
 		}
 		
-		// Auto Correlation
-		Complex[] c3 = new Complex[c2.length];
-		for(int i = 1;i <nt;i++) {
-			c3[i] = c2[i].multiply(c2[i].conjg());
-		}
-		Complex[] c4 = fft1.fast(nt, c3, 8192, 1);
-		double r0 = c[0].real();
-		for(int i=0;i<nfold;i++) {
-			r[i] = c[i].real()/r0;
-		}
-		
+//		// Auto Correlation
+//		Complex[] c3 = new Complex[c2.length];
+//		for(int i = 1;i <nt;i++) {
+//			c3[i] = c2[i].multiply(c2[i].conjg());
+//		}
+//		Complex[] c4 = fft1.fast(nfold, c3, 8192, 1);
+//		double r0 = c4[0].real();
+//		for(int i=0;i<nfold;i++) {
+//			r[i] = c4[i].real()/r0;
+//		}
+//		
 		//
 		switch (ind) {
 		case 100: {
