@@ -111,7 +111,15 @@ public class ElCentro {
 		}
 		
 		// Auto Correlation
-		
+		Complex[] c3 = new Complex[c2.length];
+		for(int i = 1;i <nt;i++) {
+			c3[i] = c2[i].multiply(c2[i].conjg());
+		}
+		Complex[] c4 = fft1.fast(nt, c3, 8192, 1);
+		double r0 = c[0].real();
+		for(int i=0;i<nfold;i++) {
+			r[i] = c[i].real()/r0;
+		}
 		
 		//
 		switch (ind) {
