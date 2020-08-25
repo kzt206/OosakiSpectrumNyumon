@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
+
 public class ElCentro {
 	public static void main(String... args) {
 		
@@ -15,28 +16,38 @@ public class ElCentro {
 		double lower = 1;
 		double upper = 7;
 		double alpha = 1;
+		double[] time = new double[n];
+		double[] wave = new double[n];
 
 		double[] waveData = new double[n];
 		File file = new File("86-El_Centro.csv");
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			String line;
+			int nLine = 0;
 			int i = 0;
 			while ((line = br.readLine()) != null) {
-				if (i < n) {
+				if (nLine >= 3 ) {
 					String[] data = line.split(",",0);
+					time[i] = Double.parseDouble(data[0]);
+					wave[i] = Double.parseDouble(data[1]);
 					//waveData[i] = Double.parseDouble(text);
 					for(String elem:data) {
-						System.out.println(elem);
+						System.out.print(elem + ",");
+						
 					}
+					System.out.println();
+					i++;
 				}
-				i++;
+				nLine++;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 
 		}
-		double[] filterData = filteringBPF(waveData, n, dt, lower, upper, alpha);
+		
+		System.out.println();
+//		double[] filterData = filteringBPF(waveData, n, dt, lower, upper, alpha);
 
 //		// output data
 //		File outfile = new File("El_Centro_filtered.txt");
