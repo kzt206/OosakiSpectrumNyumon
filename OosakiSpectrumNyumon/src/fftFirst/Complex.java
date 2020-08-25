@@ -45,7 +45,7 @@ public class Complex {
 		return image;
 	}
 
-	/** 値の০定 */
+	/** 値の設定 */
 	public void setComplex(double r, double i) {
 		real = r;
 		image = i;

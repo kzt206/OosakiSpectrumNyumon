@@ -9,10 +9,10 @@ import java.io.FileWriter;
 
 public class ElCentro {
 	public static void main(String... args) {
-		
+
 		// Input data El Centro Wave NS test data
 		int n = 1024;
-		double dt = 0.02;   //Sampling 50Hz?
+		double dt = 0.02; // Sampling 50Hz?
 		double lower = 1;
 		double upper = 7;
 		double alpha = 1;
@@ -26,14 +26,14 @@ public class ElCentro {
 			int nLine = 0;
 			int i = 0;
 			while ((line = br.readLine()) != null) {
-				if (nLine >= 3 ) {
-					String[] data = line.split(",",0);
+				if (nLine >= 3) {
+					String[] data = line.split(",", 0);
 					time[i] = Double.parseDouble(data[0]);
 					wave[i] = Double.parseDouble(data[1]);
-					//waveData[i] = Double.parseDouble(text);
-					for(String elem:data) {
+					// waveData[i] = Double.parseDouble(text);
+					for (String elem : data) {
 						System.out.print(elem + ",");
-						
+
 					}
 					System.out.println();
 					i++;
@@ -45,7 +45,7 @@ public class ElCentro {
 		} finally {
 
 		}
-		
+
 		System.out.println();
 //		double[] filterData = filteringBPF(waveData, n, dt, lower, upper, alpha);
 
@@ -64,8 +64,124 @@ public class ElCentro {
 //
 //		}
 	}
+
+	
+	// OOSAKI p.235 FPAC(Fourier spectrum,Power spectrum,Self Correlation)
+	public static double[] fpac(int n, double[] x, int nd1, double dt, int ind, int nd2) {
+		double[] x2 = new double[nd1];
+		double[] f = new double[nd2];  // Fourier spectrum
+		double[] g = new double[nd2];  // power spectrum
+		double[] r = new double[nd2];  // Self Correlation
+
+		Complex[] c = new Complex[8192];
+		for(int i = 0;i<n;i++) {
+			c[i].setComplex(x[i], 0.);
+		}
+		int nt = 2;
+		if(nt<n) {
+			nt *= 2;
+		}
+		if(nt != n) {
+			for(int i = n;i<nt;i++) {
+				c[i].setComplex(0.,0.);
+			}
+		}
+		int nfold = nt/2 + 1;
+		double t = nt*dt;
+		double df = 1./t;
+		
+		
+		switch (ind) {
+		case 100: {
+			return f;
+		}
+		case 010: {
+			return g;
+		}
+		case 001: {
+			return r;
+		}
+		}
+
+		return f;
+
+	}
 	
 	
+	
+	/**
+	 * Complex Fourier Fast Transform
+	 * 
+	 * @param N         number of data
+	 * @param data      Input data
+	 * @param samplingF Sampling frequency
+	 * @param ND        not used
+	 * @param IND       -1 -> Fourier Transform, 1 -> Fourier Inverse Tranform
+	 *                  Oosaki Reference from OOSAKI spectrum analysis basic
+	 * 
+	 */
+	public Complex[] cfft(int N, double[] data, double samplingF, int ND, int IND) {
+		Complex[] complex = new Complex[data.length];
+		for (int i = 0; i < data.length; i++) {
+			complex[i] = new Complex(data[i], 0.);
+		}
+
+		int i = 1;
+		int j = 1;
+		int m = N / 2;
+//		double deltaT = 1 / samplingF;
+
+		// Bit Traverse
+		for (i = 1; i < N + 1; i++) {
+			if (i >= j) {
+				// goto 110
+			} else {
+				Complex temp = complex[j - 1];
+				complex[j - 1] = complex[i - 1];
+				complex[i - 1] = temp;
+			}
+
+			m = N / 2; // 110
+			do {
+				if (j <= m) { // 120
+					// j = j + m;
+					break;
+					// goto 130
+				} else {
+					j = j - m;
+					m = m / 2;
+				}
+			} while (m >= 2);
+			j = j + m; // 130
+
+		}
+
+//		System.out.println();
+
+		int kmax = 1;
+		while (kmax < N) {
+			int istep = kmax * 2;
+			for (int k = 1; k < kmax + 1; k++) {
+				Complex theta = new Complex(0., Math.PI * IND * (k - 1) / kmax);
+				for (int ii = k; ii <= N; ii += istep) {
+					int jj = ii + kmax;
+					Complex tmp = complex[jj - 1].multiply(theta.cexp());
+					complex[jj - 1] = complex[ii - 1].diff(tmp);
+					complex[ii - 1] = complex[ii - 1].add(tmp);
+
+				}
+
+			}
+			kmax = istep;
+		}
+
+		for (int ii = 0; ii < complex.length; ii++) {
+			complex[ii] = complex[ii].divide(N);
+		}
+
+		return complex;
+	}
+
 	public static double[] filteringBPF(double[] waveData, int n, double dt, double lower, double upper, double alpha) {
 
 		double[] filteredData = new double[waveData.length];
