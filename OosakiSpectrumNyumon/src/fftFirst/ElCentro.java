@@ -66,13 +66,16 @@ public class ElCentro {
 	}
 
 	
-	// OOSAKI p.235 FPAC(Fourier spectrum,Power spectrum,Self Correlation)
+	// OOSAKI p.235 FPAC(Fourier spectrum,Power spectrum,Auto Correlation)
+	// ind 100 retun F,ind 010 return G, ind 001 return R
 	public static double[] fpac(int n, double[] x, int nd1, double dt, int ind, int nd2) {
 		double[] x2 = new double[nd1];
 		double[] f = new double[nd2];  // Fourier spectrum
 		double[] g = new double[nd2];  // power spectrum
-		double[] r = new double[nd2];  // Self Correlation
+		double[] r = new double[nd2];  // Auto Correlation
 
+		// Initialization
+		
 		Complex[] c = new Complex[8192];
 		for(int i = 0;i<n;i++) {
 			c[i].setComplex(x[i], 0.);
@@ -91,6 +94,26 @@ public class ElCentro {
 		double df = 1./t;
 		
 		
+		// Fourier transform
+		FFT fft1 = new FFT( n, x, 50);
+		
+		Complex[] c2 = fft1.fast(nt, c, 8192, -1);
+		
+		// Fourier spectrum
+		for(int i = 0; i<nfold ; i++) {
+			f[i] = c2[i].abs()*dt;
+		}
+		
+		// Power spectrum
+		g[0] = f[0]*f[0]/t;
+		for(int i = 1; i<nfold-1 ; i++) {
+			g[i] = 2. * f[i]*f[i] /t;
+		}
+		
+		// Auto Correlation
+		
+		
+		//
 		switch (ind) {
 		case 100: {
 			return f;
@@ -109,78 +132,7 @@ public class ElCentro {
 	
 	
 	
-	/**
-	 * Complex Fourier Fast Transform
-	 * 
-	 * @param N         number of data
-	 * @param data      Input data
-	 * @param samplingF Sampling frequency
-	 * @param ND        not used
-	 * @param IND       -1 -> Fourier Transform, 1 -> Fourier Inverse Tranform
-	 *                  Oosaki Reference from OOSAKI spectrum analysis basic
-	 * 
-	 */
-	public Complex[] cfft(int N, double[] data, double samplingF, int ND, int IND) {
-		Complex[] complex = new Complex[data.length];
-		for (int i = 0; i < data.length; i++) {
-			complex[i] = new Complex(data[i], 0.);
-		}
 
-		int i = 1;
-		int j = 1;
-		int m = N / 2;
-//		double deltaT = 1 / samplingF;
-
-		// Bit Traverse
-		for (i = 1; i < N + 1; i++) {
-			if (i >= j) {
-				// goto 110
-			} else {
-				Complex temp = complex[j - 1];
-				complex[j - 1] = complex[i - 1];
-				complex[i - 1] = temp;
-			}
-
-			m = N / 2; // 110
-			do {
-				if (j <= m) { // 120
-					// j = j + m;
-					break;
-					// goto 130
-				} else {
-					j = j - m;
-					m = m / 2;
-				}
-			} while (m >= 2);
-			j = j + m; // 130
-
-		}
-
-//		System.out.println();
-
-		int kmax = 1;
-		while (kmax < N) {
-			int istep = kmax * 2;
-			for (int k = 1; k < kmax + 1; k++) {
-				Complex theta = new Complex(0., Math.PI * IND * (k - 1) / kmax);
-				for (int ii = k; ii <= N; ii += istep) {
-					int jj = ii + kmax;
-					Complex tmp = complex[jj - 1].multiply(theta.cexp());
-					complex[jj - 1] = complex[ii - 1].diff(tmp);
-					complex[ii - 1] = complex[ii - 1].add(tmp);
-
-				}
-
-			}
-			kmax = istep;
-		}
-
-		for (int ii = 0; ii < complex.length; ii++) {
-			complex[ii] = complex[ii].divide(N);
-		}
-
-		return complex;
-	}
 
 	public static double[] filteringBPF(double[] waveData, int n, double dt, double lower, double upper, double alpha) {
 

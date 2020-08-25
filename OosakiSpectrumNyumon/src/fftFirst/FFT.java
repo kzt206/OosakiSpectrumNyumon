@@ -24,6 +24,81 @@ public class FFT {
 		this.coef_complex_fft = coef_complex_fft;
 	}
 
+	
+	/**
+	 * Complex Fourier Fast Transform modified for FAST  2020/8/25
+	 * 
+	 * @param N         number of data
+	 * @param data      Input data
+	 * @param samplingF Sampling frequency
+	 * @param ND        not used
+	 * @param IND       -1 -> Fourier Transform, 1 -> Fourier Inverse Tranform
+	 *                  Oosaki Reference from OOSAKI spectrum analysis basic
+	 * 
+	 */
+	public Complex[] fast(int N,Complex[] x,int nd,int IND) {
+		Complex[] complex = new Complex[x.length];
+		for (int i = 0; i < x.length; i++) {
+			complex[i].setComplex(x[i].real, x[i].image);
+		}
+
+		int i = 1;
+		int j = 1;
+		int m = N / 2;
+//		double deltaT = 1 / samplingF;
+
+		// Bit Traverse
+		for (i = 1; i < N + 1; i++) {
+			if (i >= j) {
+				// goto 110
+			} else {
+				Complex temp = complex[j - 1];
+				complex[j - 1] = complex[i - 1];
+				complex[i - 1] = temp;
+			}
+
+			m = N / 2; // 110
+			do {
+				if (j <= m) { // 120
+					// j = j + m;
+					break;
+					// goto 130
+				} else {
+					j = j - m;
+					m = m / 2;
+				}
+			} while (m >= 2);
+			j = j + m; // 130
+
+		}
+
+//		System.out.println();
+
+		int kmax = 1;
+		while (kmax < N) {
+			int istep = kmax * 2;
+			for (int k = 1; k < kmax + 1; k++) {
+				Complex theta = new Complex(0., Math.PI * IND * (k - 1) / kmax);
+				for (int ii = k; ii <= N; ii += istep) {
+					int jj = ii + kmax;
+					Complex tmp = complex[jj - 1].multiply(theta.cexp());
+					complex[jj - 1] = complex[ii - 1].diff(tmp);
+					complex[ii - 1] = complex[ii - 1].add(tmp);
+
+				}
+
+			}
+			kmax = istep;
+		}
+
+		for (int ii = 0; ii < complex.length; ii++) {
+			complex[ii] = complex[ii].divide(N);
+		}
+
+		return complex;
+	}
+	
+	
 	/**
 	 * Complex Fourier Fast Transform
 	 * 
